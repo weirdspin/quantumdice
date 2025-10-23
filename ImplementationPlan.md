@@ -4,9 +4,7 @@ It is crucial to follow this implementation plan sequentially. This structured a
 
 Phase 1: Project Setup & Core Logic (The "Brain")
 
-    Initialize Project: Choose your framework (React with Vite is recommended for speed) and set up the project structure.
-
-    Git Repository: Create a new GitHub repository for the project.
+    Initialize Project: Choose React and set up the project structure.
 
     Game Logic Module: Create a separate, plain JavaScript file (e.g., gameLogic.js). Implement the core, non-UI functions here: calculatePayout, generateServerSeed, getRollResult(serverSeed, clientSeed, nonce). Write unit tests for these functions if you are comfortable doing so.
 
