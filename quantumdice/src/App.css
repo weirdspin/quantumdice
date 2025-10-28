@@ -18,6 +18,12 @@
   color: var(--accent-color);
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
 .balance strong {
   margin-left: 0.5rem;
   font-size: 1.2rem;

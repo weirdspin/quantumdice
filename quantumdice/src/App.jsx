@@ -3,6 +3,7 @@ import BetControls from './BetControls';
 import PayoutDisplay from './PayoutDisplay';
 import GameHistory from './GameHistory';
 import ProvablyFair from './ProvablyFair';
+import AudioControls from './AudioControls';
 import { calculatePayout, generateServerSeed, getRollResult } from './gameLogic';
 import './App.css';
 
@@ -31,7 +32,9 @@ function App() {
   const [clientSeed, setClientSeed] = useState('lucky'); // User-configurable
   const [nonce, setNonce] = useState(0);
 
-  // Sound Effects
+  // Audio State
+  const [volume, setVolume] = useState(0.5);
+  const [isMuted, setIsMuted] = useState(false);
   const rollSoundRef = useRef(null);
   const winSoundRef = useRef(null);
   const lossSoundRef = useRef(null);
@@ -46,6 +49,14 @@ function App() {
     sha256(serverSeed).then(setServerSeedHash);
   }, [serverSeed]);
 
+  useEffect(() => {
+    if (rollSoundRef.current) {
+      rollSoundRef.current.volume = volume;
+      winSoundRef.current.volume = volume;
+      lossSoundRef.current.volume = volume;
+    }
+  }, [volume]);
+
   const handleRollDice = async () => {
     if (balance < betAmount) {
       alert("You don't have enough balance to make this bet.");
@@ -53,16 +64,20 @@ function App() {
     }
 
     setRolling(true);
-    rollSoundRef.current.play();
+    if (!isMuted) {
+      rollSoundRef.current.play();
+    }
     const roll = await getRollResult(serverSeed, clientSeed, nonce);
     setRollResult(roll);
 
     setTimeout(() => {
       const win = roll < sliderValue;
-      if (win) {
-        winSoundRef.current.play();
-      } else {
-        lossSoundRef.current.play();
+      if (!isMuted) {
+        if (win) {
+          winSoundRef.current.play();
+        } else {
+          lossSoundRef.current.play();
+        }
       }
 
       const newBalance = win ? balance + betAmount * (payout - 1) : balance - betAmount;
@@ -92,9 +107,17 @@ function App() {
 
       <header className="app-header">
         <h1>Quantum Dice</h1>
-        <div className="balance">
-          <span>Balance:</span>
-          <strong>{balance.toFixed(2)}</strong>
+        <div className="header-controls">
+          <AudioControls
+            volume={volume}
+            setVolume={setVolume}
+            isMuted={isMuted}
+            setIsMuted={setIsMuted}
+          />
+          <div className="balance">
+            <span>Balance:</span>
+            <strong>{balance.toFixed(2)}</strong>
+          </div>
         </div>
       </header>
       <main className="app-main">
