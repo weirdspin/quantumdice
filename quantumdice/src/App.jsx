@@ -22,6 +22,8 @@ function App() {
   const [winChance, setWinChance] = useState(50.00);
   const [payout, setPayout] = useState(1.98);
   const [gameHistory, setGameHistory] = useState([]);
+  const [rollResult, setRollResult] = useState(null);
+  const [rolling, setRolling] = useState(false);
 
   // Provably Fair State
   const [serverSeed, setServerSeed] = useState(generateServerSeed());
@@ -45,24 +47,29 @@ function App() {
       return;
     }
 
+    setRolling(true);
     const roll = await getRollResult(serverSeed, clientSeed, nonce);
-    const win = roll < sliderValue;
+    setRollResult(roll);
 
-    const newBalance = win ? balance + betAmount * (payout - 1) : balance - betAmount;
-    setBalance(newBalance);
+    setTimeout(() => {
+      const win = roll < sliderValue;
+      const newBalance = win ? balance + betAmount * (payout - 1) : balance - betAmount;
+      setBalance(newBalance);
 
-    const game = {
-      betType: 'Under',
-      target: sliderValue,
-      roll,
-      win,
-      payout: win ? payout : 0,
-      serverSeed, // Reveal the seed after the roll
-    };
-    setGameHistory([game, ...gameHistory]);
+      const game = {
+        betType: 'Under',
+        target: sliderValue,
+        roll,
+        win,
+        payout: win ? payout : 0,
+        serverSeed, // Reveal the seed after the roll
+      };
+      setGameHistory([game, ...gameHistory]);
 
-    setNonce(nonce + 1);
-    setServerSeed(generateServerSeed()); // Generate a new seed for the next roll
+      setNonce(nonce + 1);
+      setServerSeed(generateServerSeed()); // Generate a new seed for the next roll
+      setRolling(false);
+    }, 2000); // Duration of the roll animation
   };
 
   return (
@@ -82,11 +89,13 @@ function App() {
             sliderValue={sliderValue}
             setSliderValue={setSliderValue}
             handleRollDice={handleRollDice}
+            rolling={rolling}
           />
           <PayoutDisplay
             winChance={winChance}
             payout={payout}
             betAmount={betAmount}
+            rollResult={rollResult}
           />
         </div>
         <GameHistory gameHistory={gameHistory} />
