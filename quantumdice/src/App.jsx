@@ -40,6 +40,14 @@ function App() {
   const winSoundRef = useRef(null);
   const lossSoundRef = useRef(null);
 
+  const playSound = (audioRef) => {
+    if (!isMuted && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
+    }
+  };
+
   useEffect(() => {
     setWinChance(sliderValue);
     const newPayout = calculatePayout(sliderValue);
@@ -65,20 +73,16 @@ function App() {
     }
 
     setRolling(true);
-    if (!isMuted) {
-      rollSoundRef.current.play();
-    }
+    playSound(rollSoundRef);
     const roll = await getRollResult(serverSeed, clientSeed, nonce);
     setRollResult(roll);
 
     setTimeout(() => {
       const win = roll < sliderValue;
-      if (!isMuted) {
-        if (win) {
-          winSoundRef.current.play();
-        } else {
-          lossSoundRef.current.play();
-        }
+      if (win) {
+        playSound(winSoundRef);
+      } else {
+        playSound(lossSoundRef);
       }
 
       const newBalance = win ? balance + betAmount * (payout - 1) : balance - betAmount;
