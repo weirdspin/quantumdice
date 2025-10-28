@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import BetControls from './BetControls';
 import PayoutDisplay from './PayoutDisplay';
 import GameHistory from './GameHistory';
@@ -31,6 +31,11 @@ function App() {
   const [clientSeed, setClientSeed] = useState('lucky'); // User-configurable
   const [nonce, setNonce] = useState(0);
 
+  // Sound Effects
+  const rollSoundRef = useRef(null);
+  const winSoundRef = useRef(null);
+  const lossSoundRef = useRef(null);
+
   useEffect(() => {
     setWinChance(sliderValue);
     const newPayout = calculatePayout(sliderValue);
@@ -48,11 +53,18 @@ function App() {
     }
 
     setRolling(true);
+    rollSoundRef.current.play();
     const roll = await getRollResult(serverSeed, clientSeed, nonce);
     setRollResult(roll);
 
     setTimeout(() => {
       const win = roll < sliderValue;
+      if (win) {
+        winSoundRef.current.play();
+      } else {
+        lossSoundRef.current.play();
+      }
+
       const newBalance = win ? balance + betAmount * (payout - 1) : balance - betAmount;
       setBalance(newBalance);
 
@@ -74,6 +86,10 @@ function App() {
 
   return (
     <div className="app">
+      <audio ref={rollSoundRef} src="/sounds/roll.mp3" />
+      <audio ref={winSoundRef} src="/sounds/win.mp3" />
+      <audio ref={lossSoundRef} src="/sounds/loss.mp3" />
+
       <header className="app-header">
         <h1>Quantum Dice</h1>
         <div className="balance">
