@@ -6,14 +6,27 @@
 
 .game-history li {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   padding: 0.75rem 0;
   border-bottom: 1px solid #4a5568;
 }
 
 .game-history li:last-child {
   border-bottom: none;
+}
+
+.game-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.game-seed {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #a0aec0;
+  word-break: break-all;
 }
 
 .game-history .win {

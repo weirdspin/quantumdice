@@ -25,10 +25,15 @@
 
 .app-main {
   display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 1rem;
   padding: 1rem 0;
   align-items: start;
+}
+
+.game-interface {
+  display: grid;
+  gap: 1rem;
 }
 
 /* Basic component styling */

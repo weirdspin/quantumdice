@@ -11,9 +11,14 @@ const GameHistory = ({ gameHistory }) => {
         ) : (
           gameHistory.map((game, index) => (
             <li key={index}>
-              <span>{game.betType} {game.target.toFixed(2)}</span>
-              <span className={game.win ? 'win' : 'loss'}>{game.roll.toFixed(2)}</span>
-              <span>{game.payout.toFixed(2)}x</span>
+              <div className="game-result">
+                <span>{game.betType} {game.target.toFixed(2)}</span>
+                <span className={game.win ? 'win' : 'loss'}>{game.roll.toFixed(2)}</span>
+                <span>{game.payout.toFixed(2)}x</span>
+              </div>
+              <div className="game-seed">
+                <span>Server Seed: {game.serverSeed}</span>
+              </div>
             </li>
           ))
         )}

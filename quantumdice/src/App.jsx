@@ -2,8 +2,18 @@ import React, { useState, useEffect } from 'react';
 import BetControls from './BetControls';
 import PayoutDisplay from './PayoutDisplay';
 import GameHistory from './GameHistory';
+import ProvablyFair from './ProvablyFair';
 import { calculatePayout, generateServerSeed, getRollResult } from './gameLogic';
 import './App.css';
+
+// Helper function to hash the server seed
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
 
 function App() {
   const [balance, setBalance] = useState(1000.00);
@@ -15,6 +25,7 @@ function App() {
 
   // Provably Fair State
   const [serverSeed, setServerSeed] = useState(generateServerSeed());
+  const [serverSeedHash, setServerSeedHash] = useState('');
   const [clientSeed, setClientSeed] = useState('lucky'); // User-configurable
   const [nonce, setNonce] = useState(0);
 
@@ -23,6 +34,10 @@ function App() {
     const newPayout = calculatePayout(sliderValue);
     setPayout(newPayout);
   }, [sliderValue]);
+
+  useEffect(() => {
+    sha256(serverSeed).then(setServerSeedHash);
+  }, [serverSeed]);
 
   const handleRollDice = async () => {
     if (balance < betAmount) {
@@ -42,6 +57,7 @@ function App() {
       roll,
       win,
       payout: win ? payout : 0,
+      serverSeed, // Reveal the seed after the roll
     };
     setGameHistory([game, ...gameHistory]);
 
@@ -59,19 +75,27 @@ function App() {
         </div>
       </header>
       <main className="app-main">
-        <BetControls
-          betAmount={betAmount}
-          setBetAmount={setBetAmount}
-          sliderValue={sliderValue}
-          setSliderValue={setSliderValue}
-          handleRollDice={handleRollDice}
-        />
-        <PayoutDisplay
-          winChance={winChance}
-          payout={payout}
-          betAmount={betAmount}
-        />
+        <div className="game-interface">
+          <BetControls
+            betAmount={betAmount}
+            setBetAmount={setBetAmount}
+            sliderValue={sliderValue}
+            setSliderValue={setSliderValue}
+            handleRollDice={handleRollDice}
+          />
+          <PayoutDisplay
+            winChance={winChance}
+            payout={payout}
+            betAmount={betAmount}
+          />
+        </div>
         <GameHistory gameHistory={gameHistory} />
+        <ProvablyFair
+          serverSeedHash={serverSeedHash}
+          clientSeed={clientSeed}
+          setClientSeed={setClientSeed}
+          nonce={nonce}
+        />
       </main>
     </div>
   );
