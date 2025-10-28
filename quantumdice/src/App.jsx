@@ -104,7 +104,7 @@ function App() {
       setNonce(nonce + 1);
       setServerSeed(generateServerSeed()); // Generate a new seed for the next roll
       setRolling(false);
-    }, 2000); // Duration of the roll animation
+    }, 500); // Duration of the roll animation
   };
 
   return (

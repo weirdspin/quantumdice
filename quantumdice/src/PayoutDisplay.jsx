@@ -3,7 +3,7 @@ import { useCountUp } from './hooks/useCountUp';
 import './PayoutDisplay.css';
 
 const PayoutDisplay = ({ winChance, payout, betAmount, rollResult, lastRollWin }) => {
-  const count = useCountUp(rollResult || 0, 2000);
+  const count = useCountUp(rollResult || 0, 500);
 
   const resultClassName = `roll-result-animation ${
     lastRollWin === true ? 'win' : lastRollWin === false ? 'loss' : ''
