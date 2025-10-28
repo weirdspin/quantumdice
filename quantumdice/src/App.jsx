@@ -27,6 +27,7 @@ function App() {
   const [rolling, setRolling] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [lastRollWin, setLastRollWin] = useState(null);
+  const [betType, setBetType] = useState('under');
 
   // Provably Fair State
   const [serverSeed, setServerSeed] = useState(generateServerSeed());
@@ -50,10 +51,11 @@ function App() {
   };
 
   useEffect(() => {
-    setWinChance(sliderValue);
-    const newPayout = calculatePayout(sliderValue);
+    const chance = betType === 'under' ? sliderValue : 99.99 - sliderValue;
+    setWinChance(chance);
+    const newPayout = calculatePayout(chance);
     setPayout(newPayout);
-  }, [sliderValue]);
+  }, [sliderValue, betType]);
 
   useEffect(() => {
     sha256(serverSeed).then(setServerSeedHash);
@@ -80,7 +82,7 @@ function App() {
     setRollResult(roll);
 
     setTimeout(() => {
-      const win = roll < sliderValue;
+      const win = betType === 'under' ? roll < sliderValue : roll > sliderValue;
       setLastRollWin(win);
       if (win) {
         playSound(winSoundRef);
@@ -92,7 +94,7 @@ function App() {
       setBalance(newBalance);
 
       const game = {
-        betType: 'Under',
+        betType: betType === 'under' ? 'Under' : 'Over',
         target: sliderValue,
         roll,
         win,
@@ -142,6 +144,8 @@ function App() {
             setSliderValue={setSliderValue}
             handleRollDice={handleRollDice}
             rolling={rolling}
+            betType={betType}
+            setBetType={setBetType}
           />
           <PayoutDisplay
             winChance={winChance}
