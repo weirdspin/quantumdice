@@ -1,20 +1,31 @@
 import React from 'react';
 import './BetControls.css';
 
-const BetControls = () => {
+const BetControls = ({ betAmount, setBetAmount, sliderValue, setSliderValue, handleRollDice }) => {
   return (
     <div className="bet-controls">
       <h2>Bet Controls</h2>
       <div className="control-group">
         <label>Bet Amount</label>
-        <input type="number" defaultValue="10" />
+        <input
+          type="number"
+          value={betAmount}
+          onChange={(e) => setBetAmount(parseFloat(e.target.value))}
+        />
       </div>
       <div className="control-group">
         <label>Roll Under</label>
-        <input type="range" min="0.01" max="99.99" step="0.01" defaultValue="50" />
-        <span>50.00</span>
+        <input
+          type="range"
+          min="2"
+          max="98"
+          step="1"
+          value={sliderValue}
+          onChange={(e) => setSliderValue(parseFloat(e.target.value))}
+        />
+        <span>{sliderValue.toFixed(2)}</span>
       </div>
-      <button className="roll-button">Roll Dice</button>
+      <button className="roll-button" onClick={handleRollDice}>Roll Dice</button>
     </div>
   );
 };

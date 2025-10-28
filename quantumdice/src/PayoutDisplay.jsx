@@ -1,22 +1,22 @@
 import React from 'react';
 import './PayoutDisplay.css';
 
-const PayoutDisplay = () => {
+const PayoutDisplay = ({ winChance, payout, betAmount }) => {
   return (
     <div className="payout-display">
       <h2>Live Payout</h2>
       <div className="payout-info">
         <div className="info-box">
           <span>Win Chance</span>
-          <strong>50%</strong>
+          <strong>{winChance.toFixed(2)}%</strong>
         </div>
         <div className="info-box">
           <span>Multiplier</span>
-          <strong>1.98x</strong>
+          <strong>{payout.toFixed(2)}x</strong>
         </div>
         <div className="info-box">
           <span>Payout</span>
-          <strong>19.80</strong>
+          <strong>{(betAmount * payout).toFixed(2)}</strong>
         </div>
       </div>
       <div className="roll-result-animation">
