@@ -1,7 +1,7 @@
 import React from 'react';
 import './BetControls.css';
 
-const BetControls = ({ betAmount, setBetAmount, sliderValue, setSliderValue, handleRollDice, rolling, betType, setBetType }) => {
+const BetControls = ({ betAmount, setBetAmount, winChance, setWinChance, handleRollDice, rolling, betType, setBetType, targetNumber }) => {
   return (
     <div className="bet-controls">
       <div className="bet-type-toggle">
@@ -28,17 +28,21 @@ const BetControls = ({ betAmount, setBetAmount, sliderValue, setSliderValue, han
         />
       </div>
       <div className="control-group">
-        <label>{betType === 'under' ? 'Roll Under' : 'Roll Over'}</label>
+        <label>Win Chance</label>
         <input
           type="range"
-          min="2"
-          max="98"
+          min="1"
+          max="95"
           step="1"
-          value={sliderValue}
-          onChange={(e) => setSliderValue(parseFloat(e.target.value))}
+          value={winChance}
+          onChange={(e) => setWinChance(parseFloat(e.target.value))}
           disabled={rolling}
         />
-        <span>{sliderValue.toFixed(2)}</span>
+        <span>{winChance.toFixed(2)}%</span>
+      </div>
+      <div className="control-group">
+        <label>{betType === 'under' ? 'Roll Under' : 'Roll Over'}</label>
+        <span>{targetNumber.toFixed(2)}</span>
       </div>
       <button className="roll-button" onClick={handleRollDice} disabled={rolling}>
         {rolling ? 'Rolling...' : 'Roll Dice'}

@@ -19,7 +19,6 @@ async function sha256(message) {
 function App() {
   const [balance, setBalance] = useState(1000.00);
   const [betAmount, setBetAmount] = useState(10.00);
-  const [sliderValue, setSliderValue] = useState(50.00);
   const [winChance, setWinChance] = useState(50.00);
   const [payout, setPayout] = useState(1.98);
   const [gameHistory, setGameHistory] = useState([]);
@@ -42,6 +41,8 @@ function App() {
   const winSoundRef = useRef(null);
   const lossSoundRef = useRef(null);
 
+  const targetNumber = betType === 'under' ? winChance : 99.99 - winChance;
+
   const playSound = (audioRef) => {
     if (!isMuted && audioRef.current) {
       audioRef.current.pause();
@@ -51,11 +52,9 @@ function App() {
   };
 
   useEffect(() => {
-    const chance = betType === 'under' ? sliderValue : 99.99 - sliderValue;
-    setWinChance(chance);
-    const newPayout = calculatePayout(chance);
+    const newPayout = calculatePayout(winChance);
     setPayout(newPayout);
-  }, [sliderValue, betType]);
+  }, [winChance]);
 
   useEffect(() => {
     sha256(serverSeed).then(setServerSeedHash);
@@ -82,7 +81,7 @@ function App() {
     setRollResult(roll);
 
     setTimeout(() => {
-      const win = betType === 'under' ? roll < sliderValue : roll > sliderValue;
+      const win = betType === 'under' ? roll < targetNumber : roll > targetNumber;
       setLastRollWin(win);
       if (win) {
         playSound(winSoundRef);
@@ -95,7 +94,7 @@ function App() {
 
       const game = {
         betType: betType === 'under' ? 'Under' : 'Over',
-        target: sliderValue,
+        target: targetNumber,
         roll,
         win,
         payout: win ? payout : 0,
@@ -140,12 +139,13 @@ function App() {
           <BetControls
             betAmount={betAmount}
             setBetAmount={setBetAmount}
-            sliderValue={sliderValue}
-            setSliderValue={setSliderValue}
+            winChance={winChance}
+            setWinChance={setWinChance}
             handleRollDice={handleRollDice}
             rolling={rolling}
             betType={betType}
             setBetType={setBetType}
+            targetNumber={targetNumber}
           />
           <PayoutDisplay
             winChance={winChance}
