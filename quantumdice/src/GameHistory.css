@@ -1,7 +1,12 @@
+.game-history {
+  overflow-y: auto;
+}
+
 .game-history ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  height: 100%;
 }
 
 .game-history li {
