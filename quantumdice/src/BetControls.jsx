@@ -28,7 +28,6 @@ const BetControls = ({ betAmount, setBetAmount, winChance, setWinChance, handleR
         />
       </div>
       <div className="control-group">
-        <label>Win Chance</label>
         <input
           type="range"
           min="1"
@@ -38,7 +37,6 @@ const BetControls = ({ betAmount, setBetAmount, winChance, setWinChance, handleR
           onChange={(e) => setWinChance(parseFloat(e.target.value))}
           disabled={rolling}
         />
-        <span>{winChance.toFixed(2)}%</span>
       </div>
       <div className="control-group">
         <label>{betType === 'under' ? 'Roll Under' : 'Roll Over'}</label>
