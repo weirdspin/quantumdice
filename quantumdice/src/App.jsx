@@ -3,7 +3,7 @@ import BetControls from './BetControls';
 import PayoutDisplay from './PayoutDisplay';
 import GameHistory from './GameHistory';
 import ProvablyFair from './ProvablyFair';
-import AudioControls from './AudioControls';
+import SettingsDialog from './SettingsDialog';
 import { calculatePayout, generateServerSeed, getRollResult } from './gameLogic';
 import './App.css';
 
@@ -25,6 +25,7 @@ function App() {
   const [gameHistory, setGameHistory] = useState([]);
   const [rollResult, setRollResult] = useState(null);
   const [rolling, setRolling] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Provably Fair State
   const [serverSeed, setServerSeed] = useState(generateServerSeed());
@@ -108,18 +109,23 @@ function App() {
       <header className="app-header">
         <h1>Quantum Dice</h1>
         <div className="header-controls">
-          <AudioControls
-            volume={volume}
-            setVolume={setVolume}
-            isMuted={isMuted}
-            setIsMuted={setIsMuted}
-          />
+          <button onClick={() => setIsSettingsOpen(true)}>Settings</button>
           <div className="balance">
             <span>Balance:</span>
             <strong>{balance.toFixed(2)}</strong>
           </div>
         </div>
       </header>
+
+      <SettingsDialog
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        volume={volume}
+        setVolume={setVolume}
+        isMuted={isMuted}
+        setIsMuted={setIsMuted}
+      />
+
       <main className="app-main">
         <div className="game-interface">
           <BetControls
