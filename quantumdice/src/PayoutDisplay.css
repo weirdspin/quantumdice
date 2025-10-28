@@ -36,3 +36,12 @@
 .roll-result-animation.loss {
   color: var(--loss-color);
 }
+
+.balance-display {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+}
+
+.balance-display strong {
+  margin-left: 0.5rem;
+}

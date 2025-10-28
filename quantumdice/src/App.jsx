@@ -153,6 +153,7 @@ function App() {
             betAmount={betAmount}
             rollResult={rollResult}
             lastRollWin={lastRollWin}
+            balance={balance}
           />
         </div>
         <GameHistory gameHistory={gameHistory} />
