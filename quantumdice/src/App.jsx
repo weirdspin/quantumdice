@@ -26,6 +26,7 @@ function App() {
   const [rollResult, setRollResult] = useState(null);
   const [rolling, setRolling] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [lastRollWin, setLastRollWin] = useState(null);
 
   // Provably Fair State
   const [serverSeed, setServerSeed] = useState(generateServerSeed());
@@ -73,12 +74,14 @@ function App() {
     }
 
     setRolling(true);
+    setLastRollWin(null);
     playSound(rollSoundRef);
     const roll = await getRollResult(serverSeed, clientSeed, nonce);
     setRollResult(roll);
 
     setTimeout(() => {
       const win = roll < sliderValue;
+      setLastRollWin(win);
       if (win) {
         playSound(winSoundRef);
       } else {
@@ -145,6 +148,7 @@ function App() {
             payout={payout}
             betAmount={betAmount}
             rollResult={rollResult}
+            lastRollWin={lastRollWin}
           />
         </div>
         <GameHistory gameHistory={gameHistory} />

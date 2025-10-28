@@ -26,4 +26,13 @@
   background-color: #1a202c;
   border-radius: 8px;
   color: var(--accent-color);
+  transition: color 0.5s ease;
+}
+
+.roll-result-animation.win {
+  color: var(--win-color);
+}
+
+.roll-result-animation.loss {
+  color: var(--loss-color);
 }

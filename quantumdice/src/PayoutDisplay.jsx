@@ -2,8 +2,12 @@ import React from 'react';
 import { useCountUp } from './hooks/useCountUp';
 import './PayoutDisplay.css';
 
-const PayoutDisplay = ({ winChance, payout, betAmount, rollResult }) => {
+const PayoutDisplay = ({ winChance, payout, betAmount, rollResult, lastRollWin }) => {
   const count = useCountUp(rollResult || 0, 2000);
+
+  const resultClassName = `roll-result-animation ${
+    lastRollWin === true ? 'win' : lastRollWin === false ? 'loss' : ''
+  }`;
 
   return (
     <div className="payout-display">
@@ -22,7 +26,7 @@ const PayoutDisplay = ({ winChance, payout, betAmount, rollResult }) => {
           <strong>{(betAmount * payout).toFixed(2)}</strong>
         </div>
       </div>
-      <div className="roll-result-animation">
+      <div className={resultClassName}>
         {rollResult !== null ? count.toFixed(2) : '0.00'}
       </div>
     </div>
