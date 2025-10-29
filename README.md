@@ -1,6 +1,6 @@
 # Quantum Dice
 
-[**Live Demo**](https://weirdspin.github.io/quantum-dice/) &nbsp;&middot;&nbsp; A minimalist, provably fair dice game.
+[**Live Demo**](https://weirdspin.github.io/quantumdice/) &nbsp;&middot;&nbsp; A minimalist, provably fair dice game.
 
 ---
 
