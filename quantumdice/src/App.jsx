@@ -37,7 +37,6 @@ function App() {
   // Audio State
   const [volume, setVolume] = useState(0.5);
   const [isMuted, setIsMuted] = useState(false);
-  const rollSoundRef = useRef(null);
   const winSoundRef = useRef(null);
   const lossSoundRef = useRef(null);
 
@@ -61,8 +60,7 @@ function App() {
   }, [serverSeed]);
 
   useEffect(() => {
-    if (rollSoundRef.current) {
-      rollSoundRef.current.volume = volume;
+    if (winSoundRef.current) {
       winSoundRef.current.volume = volume;
       lossSoundRef.current.volume = volume;
     }
@@ -76,7 +74,6 @@ function App() {
 
     setRolling(true);
     setLastRollWin(null);
-    playSound(rollSoundRef);
     const roll = await getRollResult(serverSeed, clientSeed, nonce);
     setRollResult(roll);
 
@@ -110,9 +107,8 @@ function App() {
 
   return (
     <div className="app">
-      <audio ref={rollSoundRef} src="/sounds/roll.mp3" />
-      <audio ref={winSoundRef} src="/sounds/win.mp3" />
-      <audio ref={lossSoundRef} src="/sounds/loss.mp3" />
+      <audio ref={winSoundRef} src="sounds/win.mp3" />
+      <audio ref={lossSoundRef} src="sounds/loss.mp3" />
 
       <header className="app-header">
         <h1>Quantum Dice</h1>
